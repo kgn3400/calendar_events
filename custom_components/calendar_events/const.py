@@ -1,0 +1,23 @@
+"""Constants for Calendar events integration."""
+
+from logging import Logger, getLogger
+
+DOMAIN = "calendar_events"
+DOMAIN_NAME = "Calendar Events"
+LOGGER: Logger = getLogger(__name__)
+
+TRANSLATION_KEY = DOMAIN
+TRANSLATION_KEY_MISSING_ENTITY = "missing_entity"
+TRANSLATION_KEY_MISSING__TIMER_ENTITY = "missing_timer_entity"
+TRANSLATION_KEY_TEMPLATE_ERROR = "template_error"
+
+CONF_DAYS_AHEAD = "days_ahead"
+CONF_MAX_EVENTS = "max_events"
+CONF_CALENDAR_ENTITY_IDS = "calender_entity_ids"
+CONF_REMOVE_RECURRING_EVENTS = "remove_recurring_events"
+CONF_SHOW_EVENT_AS_TIME_TO = "show_event_as_time_to"
+CONF_SHOW_END_DATE = "show_show_end_date"
+CONF_SHOW_SUMMARY = "show_summary"
+CONF_USE_SUMMARY_AS_ENTITY_NAME = "use_summary_as_entity_name"
+
+VERSION_STR = "1.0.0"

@@ -1,0 +1,76 @@
+{
+    "title": "Calendar events",
+    "entity_component": {
+        "_": {
+            "name": "Calendar events"
+        }
+    },
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "missing_selection": "Nothing selected",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "title": "Calendar events helper",
+                "data": {
+                    "name": "Sensor name",
+                    "days_ahead": "Get calendar events days ahead",
+                    "max_events": "Get max events",
+                    "remove_recurring_events": "Remove recurring events",
+                    "calender_entity_ids": "Calendar this sensor tracks"
+                }
+            },
+            "user_format": {
+                "title": "Calendar events helper",
+                "data": {
+                    "show_event_as_time_to": "Show event as time to",
+                    "show_show_end_date": "Show end date",
+                    "show_summary": "Show summary",
+                    "use_summary_as_entity_name": "Use summary as entity name"
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "missing_selection": "Nothing selected",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "name": "Sensor name",
+                    "days_ahead": "Get calendar events days ahead",
+                    "max_events": "Get max events",
+                    "remove_recurring_events": "Remove recurring events",
+                    "calender_entity_ids": "Calender this  sensor tracks"
+                }
+            },
+            "init_format": {
+                "data": {
+                    "show_event_as_time_to": "Show event as time to",
+                    "show_show_end_date": "Show end date",
+                    "show_summary": "Show summary",
+                    "use_summary_as_entity_name": "Use summary as entity name"
+                }
+            }
+        }
+    },
+    "issues": {
+        "missing_entity": {
+            "description": "It looks like either entity `{entity}` has been deleted or renamed, which are used in Calendar events helper `{calendar_events_helper}`. \n\n Please fix this problem.",
+            "title": "Calendar events helper: Entity deleted or renamed"
+        },
+        "template_error": {
+            "description": "Rendering show if template `{template}` in Calendar events helper `{Calendar events_helper}` ends in error.\nError: `{error_txt}` \n\n Please fix this problem.",
+            "title": "Calendar events helper: Template error"
+        }
+    }
+}

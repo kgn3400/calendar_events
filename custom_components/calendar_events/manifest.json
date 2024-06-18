@@ -1,0 +1,21 @@
+{
+  "domain": "calendar_events",
+  "name": "Calendar events",
+  "codeowners": [
+    "@kgn3400"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/kgn3400/calendar_events",
+  "homekit": {},
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/kgn3400/calendar_events/issues",
+  "requirements": [
+    "babel",
+    "arrow"
+  ],
+  "ssdp": [],
+  "version": "1.0.0",
+  "zeroconf": []
+}
