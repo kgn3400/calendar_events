@@ -16,6 +16,8 @@
         "step": {
             "user": {
                 "title": "Calendar events helper",
+                "description": "The Calendar events helper allows you to create a set of user selected events",
+
                 "data": {
                     "name": "Sensor name",
                     "days_ahead": "Get calendar events days ahead",
