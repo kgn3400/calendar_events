@@ -16,23 +16,24 @@
         "step": {
             "user": {
                 "title": "Calendar events helper",
-                "description": "The Calendar events helper allows you to create a set of user selected events",
-
+                "description": "The calendar events helper allows you to create an overall overview for one or more calendars. For a certain number of days into the future and a maximum number of events.",
                 "data": {
                     "name": "Sensor name",
                     "days_ahead": "Get calendar events days ahead",
-                    "max_events": "Get max events",
-                    "remove_recurring_events": "Remove recurring events",
-                    "calender_entity_ids": "Calendar this sensor tracks"
+                    "max_events": "Get max calendar events",
+                    "remove_recurring_events": "Remove recurring calendar events",
+                    "calender_entity_ids": "Calendars this sensor monitors"
                 }
             },
             "user_format": {
                 "title": "Calendar events helper",
                 "data": {
-                    "show_event_as_time_to": "Show event as time to",
+                    "show_event_as_time_to": "Show calendar event as time to",
                     "show_show_end_date": "Show end date",
                     "show_summary": "Show summary",
-                    "use_summary_as_entity_name": "Use summary as entity name"
+                    "use_summary_as_entity_name": "Use summary as entity name",
+                    "md_header_template": "Calendar header template for markdown text",
+                    "md_item_template": "Calendar event template for markdown text. Values = package_name, version and old_version. Use html tag 'br' for linebreak"
                 }
             }
         }
@@ -50,17 +51,19 @@
                 "data": {
                     "name": "Sensor name",
                     "days_ahead": "Get calendar events days ahead",
-                    "max_events": "Get max events",
-                    "remove_recurring_events": "Remove recurring events",
-                    "calender_entity_ids": "Calender this  sensor tracks"
+                    "max_events": "Get max calender events",
+                    "remove_recurring_events": "Remove recurring calendar events",
+                    "calender_entity_ids": "Calenders this sensor monitors"
                 }
             },
             "init_format": {
                 "data": {
-                    "show_event_as_time_to": "Show event as time to",
+                    "show_event_as_time_to": "Show calendar event as time to",
                     "show_show_end_date": "Show end date",
                     "show_summary": "Show summary",
-                    "use_summary_as_entity_name": "Use summary as entity name"
+                    "use_summary_as_entity_name": "Use summary as entity name",
+                    "md_header_template": "Header template for markdown text",
+                    "md_item_template": "Item template for markdown text. Values = package_name, version and old_version. Use html tag 'br' for linebreak"
                 }
             }
         }

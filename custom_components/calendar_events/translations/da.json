@@ -1,0 +1,79 @@
+{
+    "title": "Kalenderbegivenheder",
+    "entity_component": {
+        "_": {
+            "name": "Kalenderbegivenheder"
+        }
+    },
+    "config": {
+        "abort": {
+            "already_configured": "Enheden er allerede konfigureret"
+        },
+        "error": {
+            "missing_selection": "Intet valgt",
+            "unknown": "Uventet fejl"
+        },
+        "step": {
+            "user": {
+                "title": "Kalenderbegivenheder hjælper",
+                "description": "Kalenderbegivenheder hjælper giver dig mulighed for at danne en samlet oversigt for en eller flere kalendere. For et bestemt antale dage frem i tiden og et max antal begivenheder.",
+                "data": {
+                    "name": "Sensor navn",
+                    "days_ahead": "Hent kalenderbegivenheder dage frem",
+                    "max_events": "Hent  max kalenderbegivenheder",
+                    "remove_recurring_events": "Fjern gentagende kalenderbegivenheder",
+                    "calender_entity_ids": "Kalendere som denne sensor overvåger"
+                }
+            },
+            "user_format": {
+                "title": "Kalenderbegivenheder hjælper",
+                "data": {
+                    "show_event_as_time_to": "Vis kalendarbegivenhed som tid til",
+                    "show_show_end_date": "Vis slut dato",
+                    "show_summary": "Vis Resumé",
+                    "use_summary_as_entity_name": "Brug resumé som entitets navn",
+                    "md_header_template": "Kalender header template til markdown tekst",
+                    "md_item_template": "Kalenderbegivenhed template til markdown tekst. Værdier = package_name, version og old_version. Brug html tag 'br' for linjeskift"
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "already_configured": "Enheden er allerede konfigureret"
+        },
+        "error": {
+            "missing_selection": "Intet valgt",
+            "unknown": "Uventet fejl"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "name": "Sensor navn",
+                    "days_ahead": "Hent kalenderbegivenheder dage frem",
+                    "max_events": "Hent  max kalenderbegivenheder",
+                    "remove_recurring_events": "Fjern gentagende kalenderbegivenheder",
+                    "calender_entity_ids": "Kalendere som denne sensor overvåger"
+                }
+            },
+            "init_format": {
+                "data": {
+                    "show_event_as_time_to": "Vis kalendarbegivenhed som tid til",
+                    "show_show_end_date": "Vis slut dato",
+                    "show_summary": "Vis Resumé",
+                    "use_summary_as_entity_name": "Brug resumé som entitets navn",
+                    "md_header_template": "Kalender header template til markdown tekst",
+                    "md_item_template": "Kalenderbegivenhed template til markdown tekst. Værdier = package_name, version og old_version. Brug html tag 'br' for linjeskift"
+                }
+            }
+        }
+    },
+    "missing_entity": {
+        "description": "Det ser ud til, at entiteten `{entity}` enten er blevet slettet eller omdøbt, som bruges i Kalenderbegivenheder hjælperen `{calendar_events_helper}`.\n\n Venligst løs dette problem.",
+        "title": "Kalenderbegivenheder hjælper: Entitet slettet eller omdøbt"
+    },
+    "template_error": {
+        "description": "Behandling af vis hvis skabelon `{template}` i Kalenderbegivenheder hjælperen `{calendar_events_helper}` fejler.\nFejl: `{error_txt}` \n\n Venligst ret dette problem.",
+        "title": "Kalenderbegivenheder hjælper: Skabelon fejl"
+    }
+}

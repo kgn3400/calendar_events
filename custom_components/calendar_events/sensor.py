@@ -91,23 +91,16 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
 
         self.translation_key = TRANSLATION_KEY
         self.language: str = "en"
+        self.markdown_text: str = ""
+        self.events_json: dict = {}
 
         self.coordinator: DataUpdateCoordinator = DataUpdateCoordinator(
             self.hass,
             LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(minutes=1),
             update_method=self.async_refresh,
         )
-
-        # self._attr_device_info = DeviceInfo(
-        #     entry_type=DeviceEntryType.SERVICE,
-        #     identifiers={(DOMAIN, DOMAIN_NAME)},
-        #     manufacturer="KGN",
-        #     suggested_area="",
-        #     sw_version=VERSION_STR,
-        #     name=DOMAIN_NAME,
-        # )
 
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:
@@ -116,6 +109,9 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
 
         for event_sensor in self.events_sensors:
             await event_sensor.async_refresh()
+
+        self.markdown_text = await self.calendar_handler.async_create_markdown()
+        self.events_json = self.calendar_handler.events
 
     # ------------------------------------------------------
     async def async_will_remove_from_hass(self) -> None:
@@ -190,8 +186,8 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         """
 
         attr: dict = {}
-        attr["events"] = self.calendar_handler.events
-
+        attr["events"] = self.events_json
+        attr["markdown_text"] = self.markdown_text
         return attr
 
     # ------------------------------------------------------
@@ -289,15 +285,6 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         self.translation_key = TRANSLATION_KEY
 
         self.formated_event: str = ""
-
-        # self._attr_device_info = DeviceInfo(
-        #     entry_type=DeviceEntryType.SERVICE,
-        #     identifiers={(DOMAIN, DOMAIN_NAME)},
-        #     manufacturer="KGN",
-        #     suggested_area="",
-        #     sw_version=VERSION_STR,
-        #     name=DOMAIN_NAME,
-        # )
 
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:

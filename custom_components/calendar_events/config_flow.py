@@ -16,12 +16,19 @@ from homeassistant.helpers.selector import (
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
 )
 
 from .const import (
     CONF_CALENDAR_ENTITY_IDS,
     CONF_DAYS_AHEAD,
+    CONF_DEFAULT_MD_HEADER_TEMPLATE,
+    CONF_DEFAULT_MD_ITEM_TEMPLATE,
     CONF_MAX_EVENTS,
+    CONF_MD_HEADER_TEMPLATE,
+    CONF_MD_ITEM_TEMPLATE,
     CONF_REMOVE_RECURRING_EVENTS,
     CONF_SHOW_END_DATE,
     CONF_SHOW_EVENT_AS_TIME_TO,
@@ -29,6 +36,7 @@ from .const import (
     CONF_USE_SUMMARY_AS_ENTITY_NAME,
     DOMAIN,
 )
+from .translate import Translate
 
 
 # ------------------------------------------------------------------
@@ -133,6 +141,24 @@ async def _create_form(
             CONF_USE_SUMMARY_AS_ENTITY_NAME,
             default=user_input.get(CONF_USE_SUMMARY_AS_ENTITY_NAME, False),
         ): BooleanSelector(),
+        vol.Optional(
+            CONF_MD_HEADER_TEMPLATE,
+            default=user_input.get(
+                CONF_MD_HEADER_TEMPLATE,
+                await Translate(hass).async_get_localized_str(
+                    CONF_DEFAULT_MD_HEADER_TEMPLATE, file_name="_defaults.json"
+                ),
+            ),
+        ): TextSelector(TextSelectorConfig(multiline=True, type=TextSelectorType.TEXT)),
+        vol.Optional(
+            CONF_MD_ITEM_TEMPLATE,
+            default=user_input.get(
+                CONF_MD_ITEM_TEMPLATE,
+                await Translate(hass).async_get_localized_str(
+                    CONF_DEFAULT_MD_ITEM_TEMPLATE, file_name="_defaults.json"
+                ),
+            ),
+        ): TextSelector(TextSelectorConfig(multiline=True, type=TextSelectorType.TEXT)),
     }
 
     match step:

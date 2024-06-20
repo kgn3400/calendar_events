@@ -20,4 +20,8 @@ CONF_SHOW_END_DATE = "show_show_end_date"
 CONF_SHOW_SUMMARY = "show_summary"
 CONF_USE_SUMMARY_AS_ENTITY_NAME = "use_summary_as_entity_name"
 
-VERSION_STR = "1.0.0"
+CONF_MD_HEADER_TEMPLATE = "md_header_template"
+CONF_DEFAULT_MD_HEADER_TEMPLATE = "defaults.default_md_header_template"
+
+CONF_MD_ITEM_TEMPLATE = "md_item_template"
+CONF_DEFAULT_MD_ITEM_TEMPLATE = "defaults.default_md_item_template"
