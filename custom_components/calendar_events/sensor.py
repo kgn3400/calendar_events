@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 from homeassistant.components.frontend import storage as frontend_store
@@ -106,6 +106,7 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
     async def async_refresh(self) -> None:
         """Refresh."""
         self.calendar_handler.language = await self.async_get_language()
+        await self.calendar_handler.get_process_calendar_events(self.calendar_entities)
 
         for event_sensor in self.events_sensors:
             await event_sensor.async_refresh()
@@ -136,7 +137,9 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
     async def async_hass_started(self, _event: Event) -> None:
         """Hass started."""
 
-        await self.calendar_handler.get_process_calendar_events(self.calendar_entities)
+        await self.calendar_handler.get_process_calendar_events(
+            self.calendar_entities, True
+        )
         self.async_schedule_update_ha_state()
         await self.coordinator.async_refresh()
 
@@ -355,7 +358,6 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         """
 
         attr: dict = {}
-        attr["updated_at"] = datetime.now(UTC).isoformat()
 
         return attr
 

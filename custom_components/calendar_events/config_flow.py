@@ -24,8 +24,6 @@ from homeassistant.helpers.selector import (
 from .const import (
     CONF_CALENDAR_ENTITY_IDS,
     CONF_DAYS_AHEAD,
-    CONF_DEFAULT_MD_HEADER_TEMPLATE,
-    CONF_DEFAULT_MD_ITEM_TEMPLATE,
     CONF_MAX_EVENTS,
     CONF_MD_HEADER_TEMPLATE,
     CONF_MD_ITEM_TEMPLATE,
@@ -36,7 +34,14 @@ from .const import (
     CONF_USE_SUMMARY_AS_ENTITY_NAME,
     DOMAIN,
 )
-from .translate import Translate
+
+# from .translate import Translate
+
+# ------------------------------------------------------------------
+default_md_header_template = (
+    "### <font color= dodgerblue> <ha-icon icon='mdi:calendar-blank-outline'></ha-icon></font>  Kalenderbegivenheder <br>",
+)
+default_md_item_template = "- <font color= dodgerblue> <ha-icon icon='mdi:calendar-clock-outline'></ha-icon></font>_{{ summary }}_ <br>__{{ formatted_event_time }}__<br>"
 
 
 # ------------------------------------------------------------------
@@ -145,18 +150,14 @@ async def _create_form(
             CONF_MD_HEADER_TEMPLATE,
             default=user_input.get(
                 CONF_MD_HEADER_TEMPLATE,
-                await Translate(hass).async_get_localized_str(
-                    CONF_DEFAULT_MD_HEADER_TEMPLATE, file_name="_defaults.json"
-                ),
+                default_md_header_template,
             ),
         ): TextSelector(TextSelectorConfig(multiline=True, type=TextSelectorType.TEXT)),
         vol.Optional(
             CONF_MD_ITEM_TEMPLATE,
             default=user_input.get(
                 CONF_MD_ITEM_TEMPLATE,
-                await Translate(hass).async_get_localized_str(
-                    CONF_DEFAULT_MD_ITEM_TEMPLATE, file_name="_defaults.json"
-                ),
+                default_md_item_template,
             ),
         ): TextSelector(TextSelectorConfig(multiline=True, type=TextSelectorType.TEXT)),
     }

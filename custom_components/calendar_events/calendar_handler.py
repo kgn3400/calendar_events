@@ -78,51 +78,58 @@ class CalendarHandler:
 
         self.last_error_template: str = ""
         self.last_error_txt_template: str = ""
+        self.next_update: datetime = datetime.now()
 
     # ------------------------------------------------------
-    async def get_process_calendar_events(self, calendar_entities: list[str]) -> None:
+    async def get_process_calendar_events(
+        self, calendar_entities: list[str], force_update: bool = False
+    ) -> None:
         """Process calendar events."""
 
-        self.events = []
+        if force_update or self.next_update < datetime.now():
+            self.events = []
 
-        try:
-            tmp_events: dict = await self.hass.services.async_call(
-                "calendar",
-                "get_events",
-                service_data={
-                    ATTR_ENTITY_ID: calendar_entities,
-                    "end_date_time": (
-                        datetime.now()
-                        + timedelta(days=self.entry.options.get(CONF_DAYS_AHEAD, 30))
-                    ).isoformat(),
-                    "start_date_time": datetime.now().isoformat(),
-                },
-                blocking=True,
-                return_response=True,
-            )
-        # except (ServiceValidationError, ServiceNotFound, vol.Invalid) as err:
-        except Exception as err:  # noqa: BLE001
-            LOGGER.error(err)
-            return
-
-        for key in tmp_events:
-            for event in tmp_events[key]["events"]:
-                self.events.append(
-                    CalendarEvent(
-                        key,
-                        event["start"],
-                        event["end"],
-                        event.get("summary", ""),
-                        event.get("description", ""),
-                        event.get("location", ""),
-                    )
+            try:
+                tmp_events: dict = await self.hass.services.async_call(
+                    "calendar",
+                    "get_events",
+                    service_data={
+                        ATTR_ENTITY_ID: calendar_entities,
+                        "end_date_time": (
+                            datetime.now()
+                            + timedelta(
+                                days=self.entry.options.get(CONF_DAYS_AHEAD, 30)
+                            )
+                        ).isoformat(),
+                        "start_date_time": datetime.now().isoformat(),
+                    },
+                    blocking=True,
+                    return_response=True,
                 )
+            # except (ServiceValidationError, ServiceNotFound, vol.Invalid) as err:
+            except Exception as err:  # noqa: BLE001
+                LOGGER.error(err)
+                return
 
-        if self.entry.options.get(CONF_REMOVE_RECURRING_EVENTS, True):
-            self.remove_recurring_events()
+            for key in tmp_events:
+                for event in tmp_events[key]["events"]:
+                    self.events.append(
+                        CalendarEvent(
+                            key,
+                            event["start"],
+                            event["end"],
+                            event.get("summary", ""),
+                            event.get("description", ""),
+                            event.get("location", ""),
+                        )
+                    )
 
-        self.events.sort(key=lambda x: x.start)
-        self.events = self.events[: int(self.entry.options.get(CONF_MAX_EVENTS, 5))]
+            if self.entry.options.get(CONF_REMOVE_RECURRING_EVENTS, True):
+                self.remove_recurring_events()
+
+            self.events.sort(key=lambda x: x.start)
+            self.events = self.events[: int(self.entry.options.get(CONF_MAX_EVENTS, 5))]
+            self.next_update = datetime.now() + timedelta(minutes=5)
 
     # ------------------------------------------------------
     def remove_recurring_events(self) -> None:
