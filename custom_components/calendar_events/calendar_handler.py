@@ -57,9 +57,9 @@ class CalendarEvent:
         self.summary: str = summary
         self.description: str = description
         self.location: str = location
-        self.formated_start: str = ""
-        self.formated_end: str = ""
-        self.formated_event_time: str = ""
+        self.formatted_start: str = ""
+        self.formatted_end: str = ""
+        self.formatted_event_time: str = ""
         self.formatted_event: str = ""
 
 
@@ -115,7 +115,10 @@ class CalendarHandler:
                 for event in tmp_events[key]["events"]:
                     self.events.append(
                         CalendarEvent(
-                            key,
+                            str(key)
+                            .replace("calendar.", "")
+                            .replace("_", " ")
+                            .capitalize(),
                             event["start"],
                             event["end"],
                             event.get("summary", ""),
@@ -205,15 +208,15 @@ class CalendarHandler:
                 and end_date.minute == 0
             ):
                 tmp_event.all_day = True
-                tmp_event.formated_start = await self.async_format_datetime(
+                tmp_event.formatted_start = await self.async_format_datetime(
                     start_date, date_only=True
                 )
-                tmp_event.formated_end = await self.async_format_datetime(
+                tmp_event.formatted_end = await self.async_format_datetime(
                     end_date, date_only=True
                 )
             else:
-                tmp_event.formated_start = await self.async_format_datetime(start_date)
-                tmp_event.formated_end = await self.async_format_datetime(end_date)
+                tmp_event.formatted_start = await self.async_format_datetime(start_date)
+                tmp_event.formatted_end = await self.async_format_datetime(end_date)
 
             diff: timedelta = start_date - datetime.now(start_date.tzinfo)
 
@@ -233,16 +236,16 @@ class CalendarHandler:
                 )
 
             else:
-                formatted_event_str = tmp_event.formated_start
+                formatted_event_str = tmp_event.formatted_start
                 if (
                     self.entry.options.get(CONF_SHOW_END_DATE, False)
                     and not tmp_event.all_day
                 ):
                     formatted_event_str = (
-                        formatted_event_str + " - " + tmp_event.formated_end
+                        formatted_event_str + " - " + tmp_event.formatted_end
                     )
 
-            tmp_event.formated_event_time = formatted_event_str
+            tmp_event.formatted_event_time = formatted_event_str
 
             if self.entry.options.get(CONF_SHOW_SUMMARY, False):
                 formatted_event_str = tmp_event.summary + " : " + formatted_event_str
@@ -255,7 +258,7 @@ class CalendarHandler:
         return None
 
     # ------------------------------------------------------------------
-    async def async_create_markdown(self) -> str:
+    def create_markdown(self) -> str:
         """Create markdown."""
 
         # ------------------------------------------------------------------
@@ -289,11 +292,11 @@ class CalendarHandler:
                     "summary": replace_markdown_tags(item.summary),
                     "description": replace_markdown_tags(item.description),
                     "location": replace_markdown_tags(item.location),
-                    "formated_start": replace_markdown_tags(item.formated_start),
-                    "formatted_end": replace_markdown_tags(item.formated_end),
+                    "formatted_start": replace_markdown_tags(item.formatted_start),
+                    "formatted_end": replace_markdown_tags(item.formatted_end),
                     "formatted_event": replace_markdown_tags(item.formatted_event),
                     "formatted_event_time": replace_markdown_tags(
-                        item.formated_event_time
+                        item.formatted_event_time
                     ),
                 }
                 tmp_md += value_template.async_render(values)
@@ -301,14 +304,14 @@ class CalendarHandler:
             tmp_md = tmp_md.replace("<br>", "\r")
 
         except (TypeError, TemplateError) as e:
-            await self.async_create_issue_template(
+            self.create_issue_template(
                 str(e), value_template.template, TRANSLATION_KEY_TEMPLATE_ERROR
             )
 
         return tmp_md
 
     # ------------------------------------------------------------------
-    async def async_create_issue_template(
+    def create_issue_template(
         self,
         error_txt: str,
         template: str,

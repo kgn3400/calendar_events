@@ -111,7 +111,7 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         for event_sensor in self.events_sensors:
             await event_sensor.async_refresh()
 
-        self.markdown_text = await self.calendar_handler.async_create_markdown()
+        self.markdown_text = self.calendar_handler.create_markdown()
         self.events_json = self.calendar_handler.events
 
     # ------------------------------------------------------

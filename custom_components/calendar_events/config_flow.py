@@ -35,13 +35,11 @@ from .const import (
     DOMAIN,
 )
 
-# from .translate import Translate
-
 # ------------------------------------------------------------------
 default_md_header_template = (
     "### <font color= dodgerblue> <ha-icon icon='mdi:calendar-blank-outline'></ha-icon></font>  Kalenderbegivenheder <br>",
 )
-default_md_item_template = "- <font color= dodgerblue> <ha-icon icon='mdi:calendar-clock-outline'></ha-icon></font>_{{ summary }}_ <br>__{{ formatted_event_time }}__<br>"
+default_md_item_template = "- <font color= dodgerblue> <ha-icon icon='mdi:calendar-clock-outline'></ha-icon></font> __{{ summary }}__ <br>_{{ formatted_event_time }}_<br>"
 
 
 # ------------------------------------------------------------------
