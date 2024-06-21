@@ -19,6 +19,7 @@ from homeassistant.helpers.template import Template
 
 from .const import (
     CONF_DAYS_AHEAD,
+    CONF_FORMAT_LANUAGE,
     CONF_MAX_EVENTS,
     CONF_MD_HEADER_TEMPLATE,
     CONF_MD_ITEM_TEMPLATE,
@@ -74,7 +75,7 @@ class CalendarHandler:
         self.hass: HomeAssistant = hass
         self.entry: ConfigEntry = entry
         self.events: list[CalendarEvent] = []
-        self.language: str = "en"
+        self.language: str = self.entry.options.get(CONF_FORMAT_LANUAGE, "en")
 
         self.last_error_template: str = ""
         self.last_error_txt_template: str = ""

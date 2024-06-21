@@ -32,6 +32,7 @@
                     "show_show_end_date": "Vis slut dato",
                     "show_summary": "Vis Resumé",
                     "use_summary_as_entity_name": "Brug resumé som entitets navn",
+                    "format_language": "Sprog der skal bruges til formattering af dato og tid",
                     "md_header_template": "Kalender header template til markdown tekst",
                     "md_item_template": "Kalenderbegivenhed template til markdown tekst. Værdier = package_name, version og old_version. Brug html tag 'br' for linjeskift"
                 }
@@ -62,18 +63,35 @@
                     "show_show_end_date": "Vis slut dato",
                     "show_summary": "Vis Resumé",
                     "use_summary_as_entity_name": "Brug resumé som entitets navn",
+                    "format_language": "Sprog der skal bruges til formattering af dato og tid",
                     "md_header_template": "Kalender header template til markdown tekst",
                     "md_item_template": "Kalenderbegivenhed template til markdown tekst. Værdier = package_name, version og old_version. Brug html tag 'br' for linjeskift"
                 }
             }
         }
     },
-    "missing_entity": {
-        "description": "Det ser ud til, at entiteten `{entity}` enten er blevet slettet eller omdøbt, som bruges i Kalenderbegivenheder hjælperen `{calendar_events_helper}`.\n\n Venligst løs dette problem.",
-        "title": "Kalenderbegivenheder hjælper: Entitet slettet eller omdøbt"
+    "entity": {
+        "sensor": {
+            "calendar_events": {
+                "state_attributes": {
+                    "events": {
+                        "name": "Begivenheder"
+                    },
+                    "markdown_text": {
+                        "name": "Markdown tekst"
+                    }
+                }
+            }
+        }
     },
-    "template_error": {
-        "description": "Behandling af vis hvis skabelon `{template}` i Kalenderbegivenheder hjælperen `{calendar_events_helper}` fejler.\nFejl: `{error_txt}` \n\n Venligst ret dette problem.",
-        "title": "Kalenderbegivenheder hjælper: Skabelon fejl"
+    "issues": {
+        "missing_entity": {
+            "description": "Det ser ud til, at entiteten `{entity}` enten er blevet slettet eller omdøbt, som bruges i Kalenderbegivenheder hjælperen `{calendar_events_helper}`.\n\n Venligst løs dette problem.",
+            "title": "Kalenderbegivenheder hjælper: Entitet slettet eller omdøbt"
+        },
+        "template_error": {
+            "description": "Behandling af vis hvis skabelon `{template}` i Kalenderbegivenheder hjælperen `{calendar_events_helper}` fejler.\nFejl: `{error_txt}` \n\n Venligst ret dette problem.",
+            "title": "Kalenderbegivenheder hjælper: Skabelon fejl"
+        }
     }
 }

@@ -13,6 +13,8 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 from homeassistant.helpers.selector import (
     BooleanSelector,
+    LanguageSelector,
+    LanguageSelectorConfig,
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
@@ -24,6 +26,7 @@ from homeassistant.helpers.selector import (
 from .const import (
     CONF_CALENDAR_ENTITY_IDS,
     CONF_DAYS_AHEAD,
+    CONF_FORMAT_LANUAGE,
     CONF_MAX_EVENTS,
     CONF_MD_HEADER_TEMPLATE,
     CONF_MD_ITEM_TEMPLATE,
@@ -144,6 +147,10 @@ async def _create_form(
             CONF_USE_SUMMARY_AS_ENTITY_NAME,
             default=user_input.get(CONF_USE_SUMMARY_AS_ENTITY_NAME, False),
         ): BooleanSelector(),
+        vol.Required(
+            CONF_FORMAT_LANUAGE,
+            default=user_input.get(CONF_FORMAT_LANUAGE, hass.config.language),
+        ): LanguageSelector(LanguageSelectorConfig()),
         vol.Optional(
             CONF_MD_HEADER_TEMPLATE,
             default=user_input.get(

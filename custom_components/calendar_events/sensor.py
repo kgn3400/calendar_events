@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
-from homeassistant.components.frontend import storage as frontend_store
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Event, HomeAssistant, State
@@ -90,7 +89,6 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         self.events_sensors: list[CalendarEventsSensor] = events_sensors
 
         self.translation_key = TRANSLATION_KEY
-        self.language: str = "en"
         self.markdown_text: str = ""
         self.events_json: dict = {}
 
@@ -105,7 +103,6 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:
         """Refresh."""
-        self.calendar_handler.language = await self.async_get_language()
         await self.calendar_handler.get_process_calendar_events(self.calendar_entities)
 
         for event_sensor in self.events_sensors:
@@ -245,22 +242,6 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
                 res = False
 
         return res
-
-    # ------------------------------------------------------
-    async def async_get_language(self) -> str:
-        """Get language."""
-
-        self.language = self.hass.config.language
-
-        owner = await self.hass.auth.async_get_owner()
-
-        if owner is not None:
-            _, owner_data = await frontend_store.async_user_store(self.hass, owner.id)
-
-            if "language" in owner_data and "language" in owner_data["language"]:
-                self.language = owner_data["language"]["language"]
-
-        return self.language
 
 
 # ------------------------------------------------------

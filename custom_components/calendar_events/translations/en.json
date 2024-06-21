@@ -32,6 +32,7 @@
                     "show_show_end_date": "Show end date",
                     "show_summary": "Show summary",
                     "use_summary_as_entity_name": "Use summary as entity name",
+                    "format_language": "Language to usr for formatting date and time",
                     "md_header_template": "Calendar header template for markdown text",
                     "md_item_template": "Calendar event template for markdown text. Values = package_name, version and old_version. Use html tag 'br' for linebreak"
                 }
@@ -62,8 +63,23 @@
                     "show_show_end_date": "Show end date",
                     "show_summary": "Show summary",
                     "use_summary_as_entity_name": "Use summary as entity name",
+                    "format_language": "Language to usr for formatting date and time",
                     "md_header_template": "Header template for markdown text",
                     "md_item_template": "Item template for markdown text. Values = package_name, version and old_version. Use html tag 'br' for linebreak"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "calendar_events": {
+                "state_attributes": {
+                    "events": {
+                        "name": "Events"
+                    },
+                    "markdown_text": {
+                        "name": "Markdown text"
+                    }
                 }
             }
         }
