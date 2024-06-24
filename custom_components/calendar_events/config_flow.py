@@ -26,7 +26,7 @@ from homeassistant.helpers.selector import (
 from .const import (
     CONF_CALENDAR_ENTITY_IDS,
     CONF_DAYS_AHEAD,
-    CONF_FORMAT_LANUAGE,
+    CONF_FORMAT_LANGUAGE,
     CONF_MAX_EVENTS,
     CONF_MD_HEADER_TEMPLATE,
     CONF_MD_ITEM_TEMPLATE,
@@ -39,9 +39,7 @@ from .const import (
 )
 
 # ------------------------------------------------------------------
-default_md_header_template = (
-    "### <font color= dodgerblue> <ha-icon icon='mdi:calendar-blank-outline'></ha-icon></font>  Kalenderbegivenheder <br>",
-)
+default_md_header_template = "### <font color= dodgerblue> <ha-icon icon='mdi:calendar-blank-outline'></ha-icon></font>  Kalenderbegivenheder <br>"
 default_md_item_template = "- <font color= dodgerblue> <ha-icon icon='mdi:calendar-clock-outline'></ha-icon></font> __{{ summary }}__ <br>_{{ formatted_event_time }}_<br>"
 
 
@@ -148,8 +146,8 @@ async def _create_form(
             default=user_input.get(CONF_USE_SUMMARY_AS_ENTITY_NAME, False),
         ): BooleanSelector(),
         vol.Required(
-            CONF_FORMAT_LANUAGE,
-            default=user_input.get(CONF_FORMAT_LANUAGE, hass.config.language),
+            CONF_FORMAT_LANGUAGE,
+            default=user_input.get(CONF_FORMAT_LANGUAGE, hass.config.language),
         ): LanguageSelector(LanguageSelectorConfig()),
         vol.Optional(
             CONF_MD_HEADER_TEMPLATE,

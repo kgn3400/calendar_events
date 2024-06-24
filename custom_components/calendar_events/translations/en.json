@@ -90,8 +90,20 @@
             "title": "Calendar events helper: Entity deleted or renamed"
         },
         "template_error": {
-            "description": "Rendering show if template `{template}` in Calendar events helper `{Calendar events_helper}` ends in error.\nError: `{error_txt}` \n\n Please fix this problem.",
+            "description": "Rendering markdown template `{template}` in Calendar events helper `{calendar_events_helper}` ends in error.\nError: `{error_txt}` \n\n Please fix this problem.",
             "title": "Calendar events helper: Template error"
+        }
+    },
+    "services": {
+        "toggle_show_as_time_to": {
+            "description": "Toggle 'Show calendar event as time to' option. Choose the calendar events entity without postfix _event_x.",
+            "name": "Toggle 'Show calendar event as time to' option",
+            "fields": {
+                "save_settings": {
+                    "description": "Save settings option.",
+                    "name": "Save settings option"
+                }
+            }
         }
     }
 }

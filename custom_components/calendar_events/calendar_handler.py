@@ -19,7 +19,7 @@ from homeassistant.helpers.template import Template
 
 from .const import (
     CONF_DAYS_AHEAD,
-    CONF_FORMAT_LANUAGE,
+    CONF_FORMAT_LANGUAGE,
     CONF_MAX_EVENTS,
     CONF_MD_HEADER_TEMPLATE,
     CONF_MD_ITEM_TEMPLATE,
@@ -69,13 +69,21 @@ class CalendarEvent:
 class CalendarHandler:
     """Calendar handler."""
 
-    def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        entry_options: dict[str, Any],
+    ) -> None:
         """Init."""
 
         self.hass: HomeAssistant = hass
         self.entry: ConfigEntry = entry
+        self.entry_options: dict[str, Any] = entry_options
         self.events: list[CalendarEvent] = []
-        self.language: str = self.entry.options.get(CONF_FORMAT_LANUAGE, "en")
+        self.language: str = self.entry_options.get(
+            CONF_FORMAT_LANGUAGE, self.hass.config.language
+        )
 
         self.last_error_template: str = ""
         self.last_error_txt_template: str = ""
@@ -83,7 +91,9 @@ class CalendarHandler:
 
     # ------------------------------------------------------
     async def get_process_calendar_events(
-        self, calendar_entities: list[str], force_update: bool = False
+        self,
+        calendar_entities: list[str],
+        force_update: bool = False,
     ) -> None:
         """Process calendar events."""
 
@@ -99,7 +109,7 @@ class CalendarHandler:
                         "end_date_time": (
                             datetime.now()
                             + timedelta(
-                                days=self.entry.options.get(CONF_DAYS_AHEAD, 30)
+                                days=self.entry_options.get(CONF_DAYS_AHEAD, 30)
                             )
                         ).isoformat(),
                         "start_date_time": datetime.now().isoformat(),
@@ -128,11 +138,11 @@ class CalendarHandler:
                         )
                     )
 
-            if self.entry.options.get(CONF_REMOVE_RECURRING_EVENTS, True):
+            if self.entry_options.get(CONF_REMOVE_RECURRING_EVENTS, True):
                 self.remove_recurring_events()
 
             self.events.sort(key=lambda x: x.start)
-            self.events = self.events[: int(self.entry.options.get(CONF_MAX_EVENTS, 5))]
+            self.events = self.events[: int(self.entry_options.get(CONF_MAX_EVENTS, 5))]
             self.next_update = datetime.now() + timedelta(minutes=5)
 
     # ------------------------------------------------------
@@ -160,7 +170,9 @@ class CalendarHandler:
 
     # ------------------------------------------------------
     async def async_format_datetime(
-        self, date_time: datetime, date_only: bool = False
+        self,
+        date_time: datetime,
+        date_only: bool = False,
     ) -> str | None:
         """Format datetime."""
 
@@ -226,7 +238,7 @@ class CalendarHandler:
                     get_locale(self.language).timeframes.get("now", "now").capitalize()
                 )
 
-            elif self.entry.options.get(CONF_SHOW_EVENT_AS_TIME_TO, False):
+            elif self.entry_options.get(CONF_SHOW_EVENT_AS_TIME_TO, False):
                 formatted_event_str: str = await self.hass.async_add_executor_job(
                     partial(
                         format_timedelta,
@@ -239,7 +251,7 @@ class CalendarHandler:
             else:
                 formatted_event_str = tmp_event.formatted_start
                 if (
-                    self.entry.options.get(CONF_SHOW_END_DATE, False)
+                    self.entry_options.get(CONF_SHOW_END_DATE, False)
                     and not tmp_event.all_day
                 ):
                     formatted_event_str = (
@@ -248,7 +260,7 @@ class CalendarHandler:
 
             tmp_event.formatted_event_time = formatted_event_str
 
-            if self.entry.options.get(CONF_SHOW_SUMMARY, False):
+            if self.entry_options.get(CONF_SHOW_SUMMARY, False):
                 formatted_event_str = tmp_event.summary + " : " + formatted_event_str
 
             tmp_event.formatted_event = formatted_event_str
@@ -272,9 +284,9 @@ class CalendarHandler:
             tmp_md: str = ""
             values: dict[str, Any] = {}
 
-            if self.entry.options.get(CONF_MD_HEADER_TEMPLATE, "") != "":
+            if self.entry_options.get(CONF_MD_HEADER_TEMPLATE, "") != "":
                 value_template: Template | None = Template(
-                    str(self.entry.options.get(CONF_MD_HEADER_TEMPLATE, "")),
+                    str(self.entry_options.get(CONF_MD_HEADER_TEMPLATE, "")),
                     self.hass,
                 )
 
@@ -282,7 +294,7 @@ class CalendarHandler:
 
             for item in self.events:
                 value_template: Template | None = Template(
-                    str(self.entry.options.get(CONF_MD_ITEM_TEMPLATE, "")),
+                    str(self.entry_options.get(CONF_MD_ITEM_TEMPLATE, "")),
                     self.hass,
                 )
                 values = {
@@ -335,8 +347,9 @@ class CalendarHandler:
                 severity=ir.IssueSeverity.WARNING,
                 translation_key=translation_key,
                 translation_placeholders={
-                    "error_txt": error_txt,
                     "template": template,
+                    "calendar_events_helper": "sensor." + self.entry.title,
+                    "error_txt": error_txt,
                 },
             )
             self.last_error_template = template

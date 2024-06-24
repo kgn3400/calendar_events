@@ -16,7 +16,7 @@
         "step": {
             "user": {
                 "title": "Kalenderbegivenheder hjælper",
-                "description": "Kalenderbegivenheder hjælper giver dig mulighed for at danne en samlet oversigt for en eller flere kalendere. For et bestemt antale dage frem i tiden og et max antal begivenheder.",
+                "description": "Kalenderbegivenheder hjælper giver dig mulighed for at danne en samlet oversigt for en eller flere kalendere. For et bestemt antal dage frem i tiden og et max antal begivenheder.",
                 "data": {
                     "name": "Sensor navn",
                     "days_ahead": "Hent kalenderbegivenheder dage frem",
@@ -28,7 +28,7 @@
             "user_format": {
                 "title": "Kalenderbegivenheder hjælper",
                 "data": {
-                    "show_event_as_time_to": "Vis kalendarbegivenhed som tid til",
+                    "show_event_as_time_to": "Vis kalenderbegivenhed som tid til",
                     "show_show_end_date": "Vis slut dato",
                     "show_summary": "Vis Resumé",
                     "use_summary_as_entity_name": "Brug resumé som entitets navn",
@@ -59,7 +59,7 @@
             },
             "init_format": {
                 "data": {
-                    "show_event_as_time_to": "Vis kalendarbegivenhed som tid til",
+                    "show_event_as_time_to": "Vis kalenderbegivenhed som tid til",
                     "show_show_end_date": "Vis slut dato",
                     "show_summary": "Vis Resumé",
                     "use_summary_as_entity_name": "Brug resumé som entitets navn",
@@ -90,8 +90,20 @@
             "title": "Kalenderbegivenheder hjælper: Entitet slettet eller omdøbt"
         },
         "template_error": {
-            "description": "Behandling af vis hvis skabelon `{template}` i Kalenderbegivenheder hjælperen `{calendar_events_helper}` fejler.\nFejl: `{error_txt}` \n\n Venligst ret dette problem.",
+            "description": "Behandling af markdown skabelon `{template}` i Kalenderbegivenheder hjælperen `{calendar_events_helper}` fejler.\nFejl: `{error_txt}` \n\n Venligst ret dette problem.",
             "title": "Kalenderbegivenheder hjælper: Skabelon fejl"
+        }
+    },
+    "services": {
+        "toggle_show_as_time_to": {
+            "description": "Skift 'Vis kalenderbegivenhed som tid til' indstilling. Vælg kalenderbegivenhed entiteten uden postfix _event_x.",
+            "name": "Skift 'Vis kalenderbegivenhed som tid til' indstilling",
+            "fields": {
+                "save_settings": {
+                    "description": "Gem indstillinger.",
+                    "name": "Gem indstillinger"
+                }
+            }
         }
     }
 }

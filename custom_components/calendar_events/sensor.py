@@ -5,21 +5,31 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
+import voluptuous as vol
+
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import Event, HomeAssistant, State
-from homeassistant.helpers import entity_registry as er, issue_registry as ir, start
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.core import Event, HomeAssistant, ServiceCall, State
+from homeassistant.helpers import (
+    config_validation as cv,
+    entity_platform,
+    entity_registry as er,
+    issue_registry as ir,
+    start,
+)
+from homeassistant.helpers.entity_platform import AddEntitiesCallback, EntityPlatform
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .calendar_handler import CalendarHandler
 from .const import (
     CONF_CALENDAR_ENTITY_IDS,
     CONF_MAX_EVENTS,
+    CONF_SHOW_EVENT_AS_TIME_TO,
     CONF_USE_SUMMARY_AS_ENTITY_NAME,
     DOMAIN,
     DOMAIN_NAME,
     LOGGER,
+    SERVICE_SAVE_SETTINGS,
     TRANSLATION_KEY,
     TRANSLATION_KEY_MISSING_ENTITY,
 )
@@ -39,17 +49,33 @@ async def async_setup_entry(
     )
 
     if len(calendar_entities) > 0:
-        calendar_handler: CalendarHandler = CalendarHandler(hass, entry)
+        entry_options: dict[str, Any] = entry.options.copy()
+
+        calendar_handler: CalendarHandler = CalendarHandler(hass, entry, entry_options)
 
         tt: list[BaseCalendarEventSensor] = []
 
         tt.extend(
-            CalendarEventsSensor(hass, entry, calendar_entities, calendar_handler, x)
+            CalendarEventsSensor(
+                hass,
+                entry,
+                entry_options,
+                calendar_entities,
+                calendar_handler,
+                x,
+            )
             for x in range(int(entry.options.get(CONF_MAX_EVENTS, 5)))
         )
 
         entities: list = [
-            CalendarEventSensor(hass, entry, calendar_entities, calendar_handler, tt),
+            CalendarEventSensor(
+                hass,
+                entry,
+                entry_options,
+                calendar_entities,
+                calendar_handler,
+                tt,
+            ),
             *tt,
         ]
 
@@ -61,9 +87,15 @@ async def async_setup_entry(
 class BaseCalendarEventSensor:
     """Base sensor class for calendar events."""
 
+    entry_options: dict[str, Any] = {}
+
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:
         """Refresh."""
+
+    # ------------------------------------------------------------------
+    async def async_toggle_show_as_time_to(self, service_data: ServiceCall) -> None:
+        """Toggle show time as time to."""
 
 
 # ------------------------------------------------------
@@ -76,6 +108,7 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         self,
         hass: HomeAssistant,
         entry: ConfigEntry,
+        entry_options: dict[str, Any],
         calendar_entities: list[str],
         calendar_handler: CalendarHandler,
         events_sensors: list[BaseCalendarEventSensor],
@@ -84,6 +117,8 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
 
         self.hass: HomeAssistant = hass
         self.entry: ConfigEntry = entry
+        self.entry_options = entry_options
+
         self.calendar_entities: list[str] = calendar_entities
         self.calendar_handler: CalendarHandler = calendar_handler
         self.events_sensors: list[CalendarEventsSensor] = events_sensors
@@ -98,6 +133,45 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
             name=DOMAIN,
             update_interval=timedelta(minutes=1),
             update_method=self.async_refresh,
+        )
+
+        self.platform: EntityPlatform = entity_platform.async_get_current_platform()
+
+        self.platform.async_register_entity_service(
+            "toggle_show_as_time_to",
+            {
+                vol.Optional(SERVICE_SAVE_SETTINGS): cv.boolean,
+            },
+            self.async_toggle_show_as_time_to_dispatcher,
+        )
+
+    # ------------------------------------------------------------------
+    async def async_toggle_show_as_time_to_dispatcher(
+        self, entity: BaseCalendarEventSensor, service_data: ServiceCall
+    ) -> None:
+        """Toggle show time as time to dispatcher."""
+
+        await entity.async_toggle_show_as_time_to(service_data)
+
+    # ------------------------------------------------------------------
+    async def async_toggle_show_as_time_to(self, service_data: ServiceCall) -> None:
+        """Toggle show time as time to."""
+
+        self.entry_options[CONF_SHOW_EVENT_AS_TIME_TO] = not self.entry_options.get(
+            CONF_SHOW_EVENT_AS_TIME_TO, False
+        )
+
+        if service_data.data.get(SERVICE_SAVE_SETTINGS, False):
+            self.update_settings()
+
+        await self.coordinator.async_refresh()
+
+    # ------------------------------------------------------------------
+    def update_settings(self) -> None:
+        """Update config."""
+
+        self.hass.config_entries.async_update_entry(
+            self.entry, data=self.entry_options, options=self.entry_options
         )
 
     # ------------------------------------------------------------------
@@ -254,6 +328,7 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         self,
         hass: HomeAssistant,
         entry: ConfigEntry,
+        entry_options: dict[str, Any],
         calendar_entities: list[str],
         calendar_handler: CalendarHandler,
         event_num: int = 0,
@@ -262,6 +337,8 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
 
         self.hass: HomeAssistant = hass
         self.entry: ConfigEntry = entry
+        self.entry_options = entry_options
+
         self.calendar_entities: list[str] = calendar_entities
         self.calendar_handler: CalendarHandler = calendar_handler
         self.event_num = event_num
@@ -269,6 +346,15 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         self.translation_key = TRANSLATION_KEY
 
         self.formated_event: str = ""
+
+        # self._attr_device_info = DeviceInfo(
+        #     entry_type=DeviceEntryType.SERVICE,
+        #     identifiers={(DOMAIN, self.entity_id)},
+        #     manufacturer="KGN",
+        #     suggested_area="",
+        #     sw_version="1.0.16",
+        #     name=self.entry.title + "_event_" + str(self.event_num),
+        # )
 
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:
@@ -310,7 +396,7 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
 
         """
 
-        if self.entry.options.get(
+        if self.entry_options.get(
             CONF_USE_SUMMARY_AS_ENTITY_NAME, False
         ) and self.event_num < len(self.calendar_handler.events):
             return self.calendar_handler.events[self.event_num].summary
