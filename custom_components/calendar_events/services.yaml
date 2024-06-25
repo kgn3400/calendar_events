@@ -4,7 +4,8 @@ toggle_show_as_time_to:
     entity:
       integration: calendar_events
       domain: sensor
-
+      supported_features:
+        - fan.FanEntityFeature.SET_SPEED
   fields:
     # Key of the field
     save_settings:

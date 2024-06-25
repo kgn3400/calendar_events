@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from functools import cached_property
 from typing import Any
 
 import voluptuous as vol
 
+from homeassistant.components.fan import FanEntityFeature
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Event, HomeAssistant, ServiceCall, State
@@ -89,11 +91,11 @@ class BaseCalendarEventSensor:
 
     entry_options: dict[str, Any] = {}
 
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------
     async def async_refresh(self) -> None:
         """Refresh."""
 
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------
     async def async_toggle_show_as_time_to(self, service_data: ServiceCall) -> None:
         """Toggle show time as time to."""
 
@@ -143,6 +145,7 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
                 vol.Optional(SERVICE_SAVE_SETTINGS): cv.boolean,
             },
             self.async_toggle_show_as_time_to_dispatcher,
+            [FanEntityFeature.SET_SPEED],  #! Cheating here
         )
 
     # ------------------------------------------------------------------
@@ -264,6 +267,12 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         attr["markdown_text"] = self.markdown_text
         return attr
 
+    # ------------------------------------------------------------------
+    @cached_property
+    def supported_features(self) -> int | None:
+        """Flag supported features."""
+        return FanEntityFeature.SET_SPEED  #! Cheating here
+
     # ------------------------------------------------------
     @property
     def should_poll(self) -> bool:
@@ -346,15 +355,6 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         self.translation_key = TRANSLATION_KEY
 
         self.formated_event: str = ""
-
-        # self._attr_device_info = DeviceInfo(
-        #     entry_type=DeviceEntryType.SERVICE,
-        #     identifiers={(DOMAIN, self.entity_id)},
-        #     manufacturer="KGN",
-        #     suggested_area="",
-        #     sw_version="1.0.16",
-        #     name=self.entry.title + "_event_" + str(self.event_num),
-        # )
 
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:

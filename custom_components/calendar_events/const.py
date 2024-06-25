@@ -1,6 +1,5 @@
 """Constants for Calendar events integration."""
 
-from enum import IntFlag
 from logging import Logger, getLogger
 
 DOMAIN = "calendar_events"
@@ -29,9 +28,3 @@ CONF_MD_ITEM_TEMPLATE = "md_item_template"
 CONF_DEFAULT_MD_ITEM_TEMPLATE = "defaults.default_md_item_template"
 
 SERVICE_SAVE_SETTINGS = "save_settings"
-
-
-class CalendarEventFeature(IntFlag):
-    """Supported features of the calendar event entity."""
-
-    MAIN = 1
