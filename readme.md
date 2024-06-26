@@ -8,14 +8,20 @@
 
 The calendar events helper allows you to create an overall overview for one or more calendars. For a certain number of days into the future and a maximum number of events.
 
-For installation instructions until the Calendar events helper is part of HACS, [see this guide](https://hacs.xyz/docs/faq/custom_repositories).
+There will be created a main sensor with the number of calendar events. And attributes with events formatted and raw to create the markdown text.
+And for each event there will be created a sensor with a postfix _event_0 to _event_x with the summary and the event date.
 
-[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=calendar_events)
+For installation instructions until the Calendar events helper is part of HACS, [see this guide](https://hacs.xyz/docs/faq/custom_repositories).
+Or click
+[![My Home Assistant](https://img.shields.io/badge/Home%20Assistant-%2341BDF5.svg?style=flat&logo=home-assistant&label=Add%20to%20HACS)](https://my.home-assistant.io/redirect/hacs_repository/?owner=kgn3400&repository=calendar_events&category=integration)
 
 ## Configuration
 
 Configuration is setup via UI in Home assistant. To add one, go to [Settings > Devices & Services > Helpers](https://my.home-assistant.io/redirect/helpers) and click the add button. Next choose the [Calendar events helper](https://my.home-assistant.io/redirect/config_flow_start?domain=calendar_events) option.
 
+Or click
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=calendar_events)
+<br>
 <!-- <img src="images/config.png" width="400" height="auto" alt="Config"> -->
 <!--
 <img src="https://github.com/kgn3400/calendar_events/blob/main/images/config.png" width="400" height="auto" alt="Config">
@@ -23,7 +29,7 @@ Configuration is setup via UI in Home assistant. To add one, go to [Settings > D
 <br/>
 -->
 
-| Template variable | description              | Example                           |
+| State attribute<br/>Template variable| description              | Example                           |
 | -------------------- | --------------------- | --------------------------------- |
 | calender             | Name of the calendar. | Google Calendar                   |
 | start                | Start of the event.   | 2024-06-05T00:21:00+00:00         |
@@ -41,8 +47,8 @@ It's possible to rotate between multiple Calendar events in the same card by usi
 
 ## Services
 
-Available services: __reload__
+Available services: __toggle_show_as_time_to__
 
-### Service calendar_events.sensor_reload
+### Service calendar_events.toggle_show_as_time_to
 
-Reset the Calendar events helper.
+Toggle 'Show calendar event as time to' option.
