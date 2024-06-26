@@ -22,12 +22,13 @@ Configuration is setup via UI in Home assistant. To add one, go to [Settings > D
 Or click
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=calendar_events)
 <br>
-<!-- <img src="images/config.png" width="400" height="auto" alt="Config"> -->
-<!--
-<img src="https://github.com/kgn3400/calendar_events/blob/main/images/config.png" width="400" height="auto" alt="Config">
+<!-- <img src="images/config.png" width="400" height="auto" alt="Config1"> -->
+<img src="https://github.com/kgn3400/calendar_events/blob/main/images/config1.png" width="400" height="auto" alt="Config">
 <br/>
 <br/>
--->
+<img src="https://github.com/kgn3400/calendar_events/blob/main/images/config2.png" width="400" height="auto" alt="Config">
+<br/>
+<br/>
 
 | State attribute<br/>Template variable| description              | Example                           |
 | -------------------- | --------------------- | --------------------------------- |
