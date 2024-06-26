@@ -25,7 +25,6 @@ Or click
 <!-- <img src="images/config.png" width="400" height="auto" alt="Config1"> -->
 <img src="https://github.com/kgn3400/calendar_events/blob/main/images/config1.png" width="400" height="auto" alt="Config">
 <br/>
-<br/>
 <img src="https://github.com/kgn3400/calendar_events/blob/main/images/config2.png" width="400" height="auto" alt="Config">
 <br/>
 <br/>
@@ -33,16 +32,16 @@ Or click
 | State attribute<br/>Template variable| description              | Example                           |
 | -------------------- | --------------------- | --------------------------------- |
 | calender             | Name of the calendar. | Google Calendar                   |
-| start                | Start of the event.   | 2024-06-05T00:21:00+00:00         |
-| end                  | End of the event.     | 2024-06-05T00:22:00+00:00         |
+| start                | Start of the event.   | 2024-07-03T00:21:00+00:00         |
+| end                  | End of the event.     | 2024-07-03T00:22:00+00:00         |
 | all_day              | All day event.        | false                             |
 | summary              | Event summary.        | Home Assistant release party      |
 | description          | Event description.    | New features in Home Assistant    |
 | location             | Event location.       | Online                            |
-| formatted_start      | formatted start.      | jun 5, 2024                       |
-| formatted_end        | Event location.       | Online                            |
-| formatted_event_time | Event location.       | Online                            |
-| formatted_event      | Event location.       | Online                            |
+| formatted_start      | formatted start.      | Jul 3, 2024, 9:00 PM              |
+| formatted_end        | Event location.       | Jul 3, 2024, 10:00 PM             |
+| formatted_event_time | Event location.       | in 1 week                            |
+| formatted_event      | Event location.       | Home Assistant release party : in 1 week |
 
 It's possible to rotate between multiple Calendar events in the same card by using the [Carousel helper integration](https://github.com/kgn3400/carousel)
 
