@@ -10,7 +10,7 @@
             "already_configured": "Device is already configured"
         },
         "error": {
-            "missing_selection": "Nothing selected",
+            "missing_selection": "No calendar selected",
             "unknown": "Unexpected error"
         },
         "step": {
@@ -44,7 +44,7 @@
             "already_configured": "Device is already configured"
         },
         "error": {
-            "missing_selection": "Nothing selected",
+            "missing_selection": "No calendar selected",
             "unknown": "Unexpected error"
         },
         "step": {

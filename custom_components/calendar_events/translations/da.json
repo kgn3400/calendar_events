@@ -10,7 +10,7 @@
             "already_configured": "Enheden er allerede konfigureret"
         },
         "error": {
-            "missing_selection": "Intet valgt",
+            "missing_selection": "Ingen kalender valgt",
             "unknown": "Uventet fejl"
         },
         "step": {
@@ -44,7 +44,7 @@
             "already_configured": "Enheden er allerede konfigureret"
         },
         "error": {
-            "missing_selection": "Intet valgt",
+            "missing_selection": "Ingen kalender valgt",
             "unknown": "Uventet fejl"
         },
         "step": {
