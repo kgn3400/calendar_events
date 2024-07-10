@@ -163,6 +163,7 @@ CONFIG_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
     ),
     "user_format": SchemaFlowFormStep(format_schema),
 }
+
 OPTIONS_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
     "init": SchemaFlowFormStep(
         vol.Schema(
@@ -178,6 +179,8 @@ OPTIONS_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
 }
 
 
+# ------------------------------------------------------------------
+# ------------------------------------------------------------------
 class ConfigFlowHandler(SchemaConfigFlowHandler, domain=DOMAIN):
     """Handle a config or options flow."""
 

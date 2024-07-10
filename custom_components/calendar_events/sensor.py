@@ -30,7 +30,6 @@ from .const import (
     CONF_USE_SUMMARY_AS_ENTITY_NAME,
     DOMAIN,
     DOMAIN_NAME,
-    LOGGER,
     SERVICE_SAVE_SETTINGS,
     TRANSLATION_KEY,
     TRANSLATION_KEY_MISSING_ENTITY,
@@ -53,8 +52,6 @@ async def async_setup_entry(
     if len(calendar_entities) > 0:
         entry_options: dict[str, Any] = entry.options.copy()
 
-        calendar_handler: CalendarHandler = CalendarHandler(hass, entry, entry_options)
-
         tt: list[BaseCalendarEventSensor] = []
 
         tt.extend(
@@ -63,7 +60,6 @@ async def async_setup_entry(
                 entry,
                 entry_options,
                 calendar_entities,
-                calendar_handler,
                 x,
             )
             for x in range(int(entry.options.get(CONF_MAX_EVENTS, 5)))
@@ -75,7 +71,6 @@ async def async_setup_entry(
                 entry,
                 entry_options,
                 calendar_entities,
-                calendar_handler,
                 tt,
             ),
             *tt,
@@ -112,7 +107,6 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         entry: ConfigEntry,
         entry_options: dict[str, Any],
         calendar_entities: list[str],
-        calendar_handler: CalendarHandler,
         events_sensors: list[BaseCalendarEventSensor],
     ) -> None:
         """Calendar events sensor."""
@@ -122,20 +116,21 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
         self.entry_options = entry_options
 
         self.calendar_entities: list[str] = calendar_entities
-        self.calendar_handler: CalendarHandler = calendar_handler
         self.events_sensors: list[CalendarEventsSensor] = events_sensors
 
         self.translation_key = TRANSLATION_KEY
         self.markdown_text: str = ""
         self.events_json: dict = {}
 
-        self.coordinator: DataUpdateCoordinator = DataUpdateCoordinator(
-            self.hass,
-            LOGGER,
-            name=DOMAIN,
-            update_interval=timedelta(minutes=1),
-            update_method=self.async_refresh,
-        )
+        self.coordinator: DataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id][
+            "coordinator"
+        ]
+        self.calendar_handler: CalendarHandler = hass.data[DOMAIN][entry.entry_id][
+            "calendar_handler"
+        ]
+
+        self.coordinator.update_method = self.async_refresh
+        self.coordinator.update_interval = timedelta(minutes=1)
 
         self.platform: EntityPlatform = entity_platform.async_get_current_platform()
 
@@ -180,7 +175,9 @@ class CalendarEventSensor(SensorEntity, BaseCalendarEventSensor):
     # ------------------------------------------------------------------
     async def async_refresh(self) -> None:
         """Refresh."""
-        await self.calendar_handler.get_process_calendar_events(self.calendar_entities)
+        await self.calendar_handler.get_process_calendar_events(
+            self.calendar_entities, True
+        )
 
         for event_sensor in self.events_sensors:
             await event_sensor.async_refresh()
@@ -339,7 +336,6 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         entry: ConfigEntry,
         entry_options: dict[str, Any],
         calendar_entities: list[str],
-        calendar_handler: CalendarHandler,
         event_num: int = 0,
     ) -> None:
         """Calendar events sensor."""
@@ -349,7 +345,10 @@ class CalendarEventsSensor(SensorEntity, BaseCalendarEventSensor):
         self.entry_options = entry_options
 
         self.calendar_entities: list[str] = calendar_entities
-        self.calendar_handler: CalendarHandler = calendar_handler
+        self.calendar_handler: CalendarHandler = hass.data[DOMAIN][entry.entry_id][
+            "calendar_handler"
+        ]
+
         self.event_num = event_num
 
         self.translation_key = TRANSLATION_KEY
