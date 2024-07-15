@@ -1,3 +1,5 @@
+# Calendar events has been renamed to [Calendar merge](https://github.com/kgn3400/calendar_merge)
+
 # Calendar events helper
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kgn3400/calendar_events)
